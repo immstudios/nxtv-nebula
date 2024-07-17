@@ -12,12 +12,17 @@ default for jingles), the logo will be hidden. Otherwise,
 the logo will be shown.
 """
 
-from nebula.plugins.playout import PlayoutPlugin
+from nebula.plugins.playout import PlayoutPlugin, PlayoutPluginSlot
 
 
 class Plugin(PlayoutPlugin):
     name = "logo"
     id_layer = 100
+    slots = [
+        PlayoutPluginSlot(type="action", name="Show"),
+        PlayoutPluginSlot(type="action", name="Hide"),
+    ]
+
 
     def on_init(self):
         self.query(f"PLAY {self.layer()} logo")
@@ -30,9 +35,9 @@ class Plugin(PlayoutPlugin):
 
     def on_command(self, action, data):
         _ = data
-        if action == "hide":
+        if action == "Hide":
             self.query(f"PLAY {self.layer()} empty")
-        elif action == "show":
+        elif action == "Show":
             self.query(f"PLAY {self.layer()} logo")
 
         return True
